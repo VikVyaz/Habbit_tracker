@@ -20,8 +20,7 @@ class PleasantHabitViewSet(viewsets.ModelViewSet):
     # permission_classes = [IsAuthenticated, HabitPermission]
 
 
-class UsefulHabitListView(generics.ListAPIView):
-    queryset = UsefulHabit.objects.all()
+class MyUsefulHabitListView(generics.ListAPIView):
     serializer_class = UsefulHabitSerializer
     pagination_class = HabitPaginator
     # permission_classes = [IsAuthenticated, HabitPermission]
@@ -31,6 +30,17 @@ class UsefulHabitListView(generics.ListAPIView):
         queryset = UsefulHabit.objects.all()
 
         return queryset.filter(owner=user)
+
+
+class PublicUsefulHabitListView(generics.ListAPIView):
+    serializer_class = UsefulHabitSerializer
+    pagination_class = HabitPaginator
+    # permission_classes = [IsAuthenticated, HabitPermission]
+
+    def get_queryset(self):
+        queryset = UsefulHabit.objects.all()
+
+        return queryset.filter(is_public=True)
 
 
 class UsefulHabitCreateView(generics.CreateAPIView):
