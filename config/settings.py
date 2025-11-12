@@ -79,10 +79,10 @@ WSGI_APPLICATION = "config.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": config("NAME"),
-        "USER": config("USER"),
-        "PASSWORD": config("PASSWORD"),
-        "HOST": config("HOST"),
+        "NAME": config("POSTGRES_DB"),
+        "USER": config("POSTGRES_USER"),
+        "PASSWORD": config("POSTGRES_PASSWORD"),
+        "HOST": config("DATABASE_HOST"),
         "PORT": config("PORT"),
     }
 }
@@ -166,9 +166,17 @@ CELERY_TASK_TIME_LIMIT = 30 * 60
 
 # Celery-beat
 
-CELERY_BEAT_SCHEDULE = {
-    'check_habits': {
-        'task': 'habits.tasks.one_hour_notification',
-        'schedule': timedelta(minutes=15),
-    },
-}
+if not DEBUG:
+    CELERY_BEAT_SCHEDULE = {
+        'check_habits': {
+            'task': 'habits.tasks.one_hour_notification',
+            'schedule': timedelta(minutes=15),
+        },
+    }
+else:
+    CELERY_BEAT_SCHEDULE = {
+        'check_habits': {
+            'task': 'habits.tasks.one_hour_notification',
+            'schedule': timedelta(seconds=10),
+        },
+    }
