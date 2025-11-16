@@ -86,15 +86,14 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_KEY }}
 
-      - name: Create project dir on server if missing
+      - name: Recreate dir
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} \
-          "mkdir -p ~/DRF-final"
+          "rm -rf ~/DRF-final && mkdir -p ~/DRF-final"
 
-      - name: Sync project files to server
+      - name: Copy project files to server
         run: |
-          rsync -av --exclude '.git' --exclude '__pycache__' ./ \
-            ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:~/DRF-final/
+          scp -r -o StrictHostKeyChecking=no ./ ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:~/DRF-final/
 
       - name: Copy .env to server
         run: |
