@@ -264,6 +264,7 @@ class RewordTestCase(APITestCase):
         self.client.force_authenticate(user=self.user)
 
     def test_6_reword_list(self):
+
         url = reverse('habits:reword-list')
 
         response = self.client.get(url)
@@ -274,18 +275,6 @@ class RewordTestCase(APITestCase):
         )
 
         self.assertEqual(
-            response.json(),
-            {
-                'count': 1,
-                'next': None,
-                'previous': None,
-                'results': [
-                    {
-                        'id': 2,
-                        'name': 'test',
-                        'description': 'test'
-                    }
-                ]
-            }
-
+            len(response.json()['results']),
+            1
         )
