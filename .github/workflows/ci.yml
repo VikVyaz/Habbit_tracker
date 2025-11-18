@@ -88,10 +88,13 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_KEY }}
 
-      - name: Deploy .env to server
+      - name: Deploy .env and docker-compose.yaml to server
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} "cat > ~/DRF-final/.env" <<'EOF'
           ${{ secrets.ENV_FILE }}
+          EOF
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} "cat > ~/DRF-final/docker-compose.yaml" <<'EOF'
+          ${{ secrets.DOCKER_COMPOSE }}
           EOF
 
       - name: Deploy to Server
