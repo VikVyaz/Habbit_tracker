@@ -20,7 +20,7 @@ services:
     ports:
       - '80:80'
     volumes:
-      - ./Dockerfiles/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - /home/test/DRF-final/nginx.conf:/etc/nginx/nginx.conf:ro
       - static_volume:/app/staticfiles
     depends_on:
       - web

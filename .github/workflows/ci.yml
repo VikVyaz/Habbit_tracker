@@ -91,13 +91,16 @@ jobs:
       - name: Make dir on Server
         run: ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} "mkdir -p /home/test/DRF-final"
 
-      - name: Deploy .env and docker-compose.yml to Server
+      - name: Deploy .env, nginx.conf and docker-compose.yml to Server
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} "cat > ~/DRF-final/.env" <<'EOF'
           ${{ secrets.ENV_FILE }}
           EOF
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} "cat > ~/DRF-final/docker-compose.yml" <<'EOF'
           ${{ secrets.DOC_COMP_DEPLOY }}
+          EOF
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} "cat > ~/DRF-final/nginx.conf" <<'EOF'
+          ${{ secrets.NGINX_CONF }}
           EOF
 
       - name: Deploy to Server
